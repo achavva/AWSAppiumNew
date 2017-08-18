@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.testng.Assert;
@@ -20,6 +21,7 @@ import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.service.local.AppiumDriverLocalService;
 
 public class TS_VerifyHomeScreen {
+	
 	private static final Logger LOGGER = Logger.getLogger(TS_VerifyHomeScreen.class.getName());
 	private AndroidDriver<MobileElement> driver;
 	private AppiumDriverLocalService appiumService;
@@ -45,10 +47,23 @@ public class TS_VerifyHomeScreen {
 
 		appLib.delay(30000);
 		
-		MobileElement noInternetDialog = driver.findElement(By.id("com.disney.wdpro.dlr:id/dismiss_banner_button"));
-		if(noInternetDialog != null){
-			noInternetDialog.click();
+		boolean noInternetDialog = driver.findElements(By.id("com.disney.wdpro.dlr:id/dismiss_banner_button")).size() > 0;
+		if(noInternetDialog){
+			driver.findElement(By.id("com.disney.wdpro.dlr:id/dismiss_banner_button")).click();
 		}
+		
+		boolean cachingPolicyAlert = driver.findElements(By.xpath("//android.widget.Button[@text='Close']")).size() > 0;
+		if(cachingPolicyAlert){
+			driver.findElement(By.id("fr.disneylandparis.android:id/btn_thanks")).click();
+			appLib.delay(30000);
+			LOGGER.info("Clicked successfully on Close");
+		}
+
+		boolean mickyIcon = driver.findElements(By.id("com.disney.wdpro.dlr:id/img_avatar")).size() > 0;
+		if(mickyIcon){
+			driver.findElement(By.id("com.disney.wdpro.dlr:id/img_avatar")).click();
+		}
+		appLib.delay(10000);
 		String homeScreenTitle = driver.findElement(By.id("com.disney.wdpro.dlr:id/section_text_title")).getText();
 		// Verify 'Park Info & Entry' screen is displayed
 		Assert.assertEquals("Park Info & Entry", homeScreenTitle);
@@ -59,36 +74,53 @@ public class TS_VerifyHomeScreen {
 		WebElement myTickets = parkInfoSection.get(2);
 		WebElement BuyTickets = parkInfoSection.get(3);
 
-
-
-		/**
-		 * Navigate to "My Tickets" screen
-		 */
-		//myTickets.click();
 		BuyTickets.click();
 		appLib.delay(30000);
 
-		// Verify screen title
-		/*Assert.assertTrue(driver.findElement(By.xpath("//android.widget.TextView[@text='Sign In to Your Account']")).isDisplayed(),"'Sign In to Your Account' screen is not displayed");
+		Assert.assertTrue(driver.findElement(By.xpath("//android.widget.TextView[@text='Choose Your Tickets']")).isDisplayed());
 
-		// adding Email and Password 
+		// Purchasing a ticket 
+		appLib.waitForElementVisibility(By.id("number_of_days_text_view"));
+		List<MobileElement> numberofdays = driver.findElements(By.id("number_of_days_text_view"));
+		WebElement two = numberofdays.get(1);
+		two.click();
+		appLib.delay(1500);
+
+		WebElement add = driver.findElement(By.id("com.disney.wdpro.dlr:id/plus_button"));
+		add.click();
+		appLib.delay(1000);
+
+		Dimension size2 = driver.manage().window().getSize();
+
+		int x1 = (int) (size2.width / 2);
+		int startY1 = (int) (size2.height * 0.90);
+		int endY1 = (int) (size2.height * 0.20);
+		driver.swipe(x1, startY1, x1, endY1, 1000);
+
+		WebElement oneparkperday = driver.findElement(By.id("com.disney.wdpro.dlr:id/price_information_section_front"));
+		oneparkperday.click();
+		//		appLib.delay(1000);
+		appLib.waitForElementVisibility(By.id("txt_username"));
 		WebElement email = driver.findElement(By.id("txt_username"));
 		email.click();
+		appLib.delay(2000);
 		email.clear();
+		appLib.delay(2000);
 		email.sendKeys("pharsha@test.com");
 
 		WebElement password = driver.findElement(By.id("txt_password"));
 		password.click();
-		password.clear();
 		password.sendKeys("test123!");
 
 		WebElement signin = driver.findElement(By.id("com.disney.wdpro.dlr:id/btn_login"));
 		signin.click();
-		driver.navigate().back();
 
+		appLib.delay(15000);
 
-		// Navigate to back to home screen
-		driver.navigate().back();*/
+		/*appLib.waitForElementVisibility(By.name("Name"));
+		WebElement assignname = driver.findElement(By.name("Name"));
+		assignname.click();
+		assignname.sendKeys("Goutham");*/
 	}
 
 	//		
