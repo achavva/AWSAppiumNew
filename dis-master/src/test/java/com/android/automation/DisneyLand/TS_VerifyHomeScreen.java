@@ -36,9 +36,11 @@ public class TS_VerifyHomeScreen {
 		final String URL_STRING = "http://127.0.0.1:4723/wd/hub";
 		URL url = new URL(URL_STRING);
 		DesiredCapabilities capabilities = new DesiredCapabilities();
-		capabilities.setCapability("VERSION", "4.2.2");
+		capabilities.setCapability("VERSION", "7.0");
 		capabilities.setCapability("deviceName", "Emulator");
-		capabilities.setCapability("platformName", "Adroid");
+		capabilities.setCapability("platformName", "Android");
+		capabilities.setCapability("appPackage", "com.disney.wdpro.dlr");
+		capabilities.setCapability("appActivity", "com.disney.wdpro.park.activities.SplashActivity");
 		driver = new AndroidDriver<MobileElement>(url, capabilities);
 	}
 
@@ -47,23 +49,45 @@ public class TS_VerifyHomeScreen {
 
 		appLib.delay(30000);
 		
+		boolean max = driver.findElements(By.xpath("//android.widget.Button[@text='Continue']")).size() > 0;
+		if(max){
+			LOGGER.info("maxmaxmax@@@@@@@@@@");
+			driver.findElement(By.xpath("//android.widget.Button[@text='Continue']")).click();
+			appLib.delay(7000);
+		}
+				
 		boolean noInternetDialog = driver.findElements(By.id("com.disney.wdpro.dlr:id/dismiss_banner_button")).size() > 0;
 		if(noInternetDialog){
 			driver.findElement(By.id("com.disney.wdpro.dlr:id/dismiss_banner_button")).click();
 		}
 		
+		boolean maxPass = driver.findElements(By.xpath("//android.widget.TextView[@text='Choose Your Tickets']")).size() > 0;
+		if(maxPass){
+			driver.findElement(By.id("//android.widget.TextView[@text='Choose Your Tickets']")).click();
+			appLib.delay(15000);
+		}
+		
 		boolean cachingPolicyAlert = driver.findElements(By.xpath("//android.widget.Button[@text='Close']")).size() > 0;
 		if(cachingPolicyAlert){
 			driver.findElement(By.id("fr.disneylandparis.android:id/btn_thanks")).click();
-			appLib.delay(30000);
+			appLib.delay(15000);
 			LOGGER.info("Clicked successfully on Close");
 		}
 
 		boolean mickyIcon = driver.findElements(By.id("com.disney.wdpro.dlr:id/img_avatar")).size() > 0;
 		if(mickyIcon){
+			LOGGER.info("mickyIcon-mickyIcon-mickyIcon-mickyIcon@@@@@@@@@@@@@@@@@@@@");
 			driver.findElement(By.id("com.disney.wdpro.dlr:id/img_avatar")).click();
 		}
 		appLib.delay(10000);
+		
+		boolean max2 = driver.findElements(By.xpath("//android.widget.Button[@text='Continue']")).size() > 0;
+		if(max2){
+			LOGGER.info("max2max2max2max2max2@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+			driver.findElement(By.xpath("//android.widget.Button[@text='Continue']")).click();
+			appLib.delay(15000);
+		}
+		
 		String homeScreenTitle = driver.findElement(By.id("com.disney.wdpro.dlr:id/section_text_title")).getText();
 		// Verify 'Park Info & Entry' screen is displayed
 		Assert.assertEquals("Park Info & Entry", homeScreenTitle);
@@ -75,7 +99,7 @@ public class TS_VerifyHomeScreen {
 		WebElement BuyTickets = parkInfoSection.get(3);
 
 		BuyTickets.click();
-		appLib.delay(30000);
+		appLib.delay(10000);
 
 		Assert.assertTrue(driver.findElement(By.xpath("//android.widget.TextView[@text='Choose Your Tickets']")).isDisplayed());
 
@@ -84,11 +108,11 @@ public class TS_VerifyHomeScreen {
 		List<MobileElement> numberofdays = driver.findElements(By.id("number_of_days_text_view"));
 		WebElement two = numberofdays.get(1);
 		two.click();
-		appLib.delay(1500);
+		appLib.delay(5000);
 
 		WebElement add = driver.findElement(By.id("com.disney.wdpro.dlr:id/plus_button"));
 		add.click();
-		appLib.delay(1000);
+		appLib.delay(3000);
 
 		Dimension size2 = driver.manage().window().getSize();
 
@@ -115,15 +139,9 @@ public class TS_VerifyHomeScreen {
 		WebElement signin = driver.findElement(By.id("com.disney.wdpro.dlr:id/btn_login"));
 		signin.click();
 
-		appLib.delay(15000);
-
-		/*appLib.waitForElementVisibility(By.name("Name"));
-		WebElement assignname = driver.findElement(By.name("Name"));
-		assignname.click();
-		assignname.sendKeys("Goutham");*/
+		appLib.delay(10000);
 	}
 
-	//		
 	@AfterTest
 	public void teardown() {
 		driver.quit();
