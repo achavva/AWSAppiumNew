@@ -37,7 +37,7 @@ public class TS_VerifyHomeScreen {
 		URL url = new URL(URL_STRING);
 		DesiredCapabilities capabilities = new DesiredCapabilities();
 		capabilities.setCapability("VERSION", "7.0");
-		capabilities.setCapability("deviceName", "Emulator");
+		capabilities.setCapability("deviceName", "a721dacc0703");
 		capabilities.setCapability("platformName", "Android");
 		capabilities.setCapability("appPackage", "com.disney.wdpro.dlr");
 		capabilities.setCapability("appActivity", "com.disney.wdpro.park.activities.SplashActivity");
@@ -49,10 +49,16 @@ public class TS_VerifyHomeScreen {
 
 		appLib.delay(30000);
 		
-		boolean max = driver.findElements(By.xpath("//android.widget.Button[@text='Continue']")).size() > 0;
+		/*boolean max = driver.findElements(By.xpath("//android.widget.Button[@text='Continue']")).size() > 0;
 		if(max){
 			LOGGER.info("maxmaxmax@@@@@@@@@@");
 			driver.findElement(By.xpath("//android.widget.Button[@text='Continue']")).click();
+			appLib.delay(7000);
+		}*/
+		boolean max = driver.findElements(By.xpath("//android.view.View[@content-desc='Continue']")).size() > 0;
+		if(max){
+			LOGGER.info("maxmaxmax@@@@@@@@@@");
+			driver.findElement(By.xpath("//android.view.View[@content-desc='Continue']")).click();
 			appLib.delay(7000);
 		}
 				
@@ -81,13 +87,14 @@ public class TS_VerifyHomeScreen {
 		}
 		appLib.delay(10000);
 		
-		boolean max2 = driver.findElements(By.xpath("//android.widget.Button[@text='Continue']")).size() > 0;
+		boolean max2 = driver.findElements(By.xpath("//android.view.View[@content-desc='Continue']")).size() > 0;
 		if(max2){
-			LOGGER.info("max2max2max2max2max2@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-			driver.findElement(By.xpath("//android.widget.Button[@text='Continue']")).click();
-			appLib.delay(15000);
+			LOGGER.info("maxmaxmax@@@@@@@@@@");
+			driver.findElement(By.xpath("//android.view.View[@content-desc='Continue']")).click();
+			appLib.delay(7000);
 		}
 		
+		appLib.delay(30000);
 		String homeScreenTitle = driver.findElement(By.id("com.disney.wdpro.dlr:id/section_text_title")).getText();
 		// Verify 'Park Info & Entry' screen is displayed
 		Assert.assertEquals("Park Info & Entry", homeScreenTitle);
